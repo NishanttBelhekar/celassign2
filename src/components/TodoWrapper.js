@@ -45,10 +45,15 @@ export const TodoWrapper = () => {
   const editTodo = (id, newTask) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, task: newTask, isEditing: false } : todo
+        todo.id === id ? { ...todo, task: newTask, isEditing: !todo.isEditing } : todo
       )
     );
   };
+
+  const editTask = (task, id) => {
+    setTodos(todos.map(todo => todo.id === id ? {...todo, task, isEditing: !todo.isEditing} : todo));
+
+  }
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
@@ -90,13 +95,14 @@ export const TodoWrapper = () => {
       <TodoForm addTodo={addTodo} />
       {filteredTodos().map((todo, index) =>
         todo.isEditing ? (
-          <EditTodoForm key={todo.id} editTodo={editTodo} task={todo} />
+          <EditTodoForm key={todo.id} editTodo={editTask} task={todo} />
         ) : (
           <Todo
             key={todo.id}
             task={todo}
             toggleCompleted={toggleCompleted}
             deleteTodo={deleteTodo}
+            editTodo={editTodo}
           />
         )
       )}
